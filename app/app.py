@@ -3,6 +3,7 @@ Aplicación web de calculadora simple usando Flask.
 Permite realizar operaciones básicas (suma, resta, multiplicación y división)
 a través de un formulario HTML.
 """
+
 # app/app.py
 from flask import Flask, render_template, request
 from .calculadora import sumar, restar, multiplicar, dividir
@@ -12,9 +13,6 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    """
-    Función Pricnipal de la app
-    """
     resultado = None
     if request.method == "POST":
         try:
@@ -41,4 +39,4 @@ def index():
 
 
 if __name__ == "__main__":  # pragma: no cover
-    app.run(debug=True, port=5000, host="0.0.0.0") 
+    app.run(debug=True, port=5000, host="0.0.0.0")

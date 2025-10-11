@@ -1,6 +1,3 @@
-"""
-Módulo de operaciones matemáticas básicas para la aplicación de calculadora.
-"""
 # app/calculadora.py
 def sumar(a, b):
     return a + b
