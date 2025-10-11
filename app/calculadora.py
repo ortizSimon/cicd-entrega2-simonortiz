@@ -1,7 +1,9 @@
 """
-Aplicación web de calculadora 
+Aplicación web de calculadora
 Funciones Basicas: sumar, restar, multiplicar, dividir
 """
+
+
 # app/calculadora.py
 def sumar(a, b):
     """Devuelve la suma de a y b."""
