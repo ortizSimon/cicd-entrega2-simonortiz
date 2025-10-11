@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """Maneja la página principal y el formulario de la calculadora."""
     resultado = None
     if request.method == "POST":
         try:
