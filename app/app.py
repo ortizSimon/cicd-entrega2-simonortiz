@@ -5,10 +5,17 @@ a través de un formulario HTML.
 """
 
 # app/app.py
+import os
 from flask import Flask, render_template, request
 from .calculadora import sumar, restar, multiplicar, dividir
 
 app = Flask(__name__)
+app.config['DEBUG'] = False
+
+
+@app.route("/health")
+def health():
+    return "OK", 200
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -40,4 +47,5 @@ def index():
 
 
 if __name__ == "__main__":  # pragma: no cover
-    app.run(debug=True, port=5000, host="0.0.0.0")
+    app_port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, port=app_port, host="0.0.0.0")
