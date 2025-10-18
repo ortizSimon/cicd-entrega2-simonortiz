@@ -10,7 +10,7 @@ from flask import Flask, render_template, request
 from .calculadora import sumar, restar, multiplicar, dividir
 
 app = Flask(__name__)
-app.config['DEBUG'] = False
+app.config["DEBUG"] = False
 
 
 @app.route("/health")
