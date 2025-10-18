@@ -28,10 +28,18 @@ def test_potencia():
     assert potencia(5, 2) == 25
     assert potencia(3, 0) == 1
     assert potencia(2, -1) == 0.5
+    assert potencia(0, 5) == 0
+    assert potencia(1, 100) == 1
+    assert potencia(-2, 3) == -8
+    assert potencia(-2, 2) == 4
 
 def test_modulo():
     assert modulo(10, 3) == 1
     assert modulo(15, 4) == 3
     assert modulo(8, 2) == 0
+    assert modulo(0, 5) == 0
+    assert modulo(-10, 3) == 2
+    assert modulo(10, -3) == -2
+    assert modulo(-10, -3) == -1
     with pytest.raises(ZeroDivisionError):
         modulo(1, 0)
