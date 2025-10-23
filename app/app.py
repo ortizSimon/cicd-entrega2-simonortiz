@@ -6,7 +6,7 @@ a través de un formulario HTML.
 
 # app/app.py
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from .todo import (
     agregar_todo,
     eliminar_todo,
@@ -17,9 +17,7 @@ from .todo import (
 
 app = Flask(__name__)
 app.config["DEBUG"] = False
-
-# Lista global simple en memoria
-todos_globales = []
+app.secret_key = "todo-secret-key-12345"
 
 
 @app.route("/health")
@@ -30,8 +28,11 @@ def health():
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Maneja la página principal y el formulario de la to-do list."""
-    global todos_globales
-    todos = todos_globales
+    # Inicializar lista de todos en la sesión si no existe
+    if "todos" not in session:
+        session["todos"] = []
+
+    todos = session["todos"]
     mensaje = None
 
     if request.method == "POST":
@@ -68,6 +69,9 @@ def index():
             mensaje = f"Error: {str(e)}"
         except Exception as e:
             mensaje = f"Error inesperado: {str(e)}"
+
+        # Guardar cambios en la sesión
+        session["todos"] = todos
 
     return render_template("index.html", todos=todos, mensaje=mensaje)
 
