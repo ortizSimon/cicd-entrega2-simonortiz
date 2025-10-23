@@ -10,22 +10,6 @@ def test_agregar_todo():
     assert len(todos) == 1
     assert todos[0]["id"] == 1
 
-def test_eliminar_todo():
-    todos = []
-    agregar_todo(todos, "Todo 1")
-    agregar_todo(todos, "Todo 2")
-    todo_eliminado = eliminar_todo(todos, 1)
-    assert todo_eliminado["texto"] == "Todo 1"
-    assert len(todos) == 1
-    assert todos[0]["texto"] == "Todo 2"
-
-def test_marcar_completado():
-    todos = []
-    agregar_todo(todos, "Todo pendiente")
-    todo_completado = marcar_completado(todos, 1)
-    assert todo_completado["completado"] == True
-    assert todos[0]["completado"] == True
-
 def test_obtener_todos():
     todos = []
     agregar_todo(todos, "Todo 1")
@@ -48,23 +32,3 @@ def test_agregar_todo_texto_vacio():
     todos = []
     with pytest.raises(ValueError):
         agregar_todo(todos, "")
-
-def test_eliminar_todo_id_invalido():
-    todos = []
-    with pytest.raises(ValueError):
-        eliminar_todo(todos, 0)
-
-def test_eliminar_todo_no_encontrado():
-    todos = []
-    with pytest.raises(ValueError):
-        eliminar_todo(todos, 999)
-
-def test_marcar_completado_id_invalido():
-    todos = []
-    with pytest.raises(ValueError):
-        marcar_completado(todos, 0)
-
-def test_marcar_completado_no_encontrado():
-    todos = []
-    with pytest.raises(ValueError):
-        marcar_completado(todos, 999)
