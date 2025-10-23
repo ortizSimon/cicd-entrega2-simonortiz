@@ -17,7 +17,7 @@ from .todo import (
 
 app = Flask(__name__)
 app.config["DEBUG"] = False
-app.secret_key = "todo-secret-key-12345"
+app.secret_key = os.environ.get("SECRET_KEY", "dev-key-change-in-production")
 
 
 @app.route("/health")
