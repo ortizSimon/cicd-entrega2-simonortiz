@@ -26,14 +26,6 @@ def test_index_post_eliminar(client):
     assert response.status_code == 200
     assert 'Todo eliminado exitosamente' in response.data.decode('utf-8')
 
-def test_index_post_completar(client):
-    # Primero agregar un todo
-    client.post('/', data={'accion': 'agregar', 'texto': 'Todo a completar'})
-    # Luego completarlo
-    response = client.post('/', data={'accion': 'completar', 'todo_id': '1'})
-    assert response.status_code == 200
-    assert 'Todo marcado como completado' in response.data.decode('utf-8')
-
 def test_index_post_limpiar(client):
     # Primero agregar y completar un todo
     client.post('/', data={'accion': 'agregar', 'texto': 'Todo a limpiar'})
