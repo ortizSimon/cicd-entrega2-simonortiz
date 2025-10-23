@@ -34,8 +34,6 @@ def marcar_completado(todos, todo_id):
         return False
     for todo in todos:
         if todo["id"] == todo_id:
-            if todo["completado"]:
-                return False  # Ya está completado
             todo["completado"] = True
             return True
     return False
