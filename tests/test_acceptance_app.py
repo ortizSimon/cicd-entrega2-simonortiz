@@ -22,7 +22,7 @@ def test_app_loads(browser):
     """Test básico: verificar que la aplicación carga"""
     browser.get(BASE_URL)
     assert "To-Do List" in browser.title
-    assert browser.current_url == BASE_URL + "/"
+    assert browser.current_url == BASE_URL.rstrip('/') + "/"
 
 def test_add_todo(browser):
     """Test: agregar un todo"""
@@ -37,7 +37,7 @@ def test_add_todo(browser):
     agregar_button.click()
     
     # Verificar que la página carga
-    assert browser.current_url == BASE_URL + "/"
+    assert browser.current_url == BASE_URL.rstrip('/') + "/"
     assert "Test todo" in browser.page_source
 
 def test_error_handling(browser):
@@ -53,4 +53,4 @@ def test_error_handling(browser):
     agregar_button.click()
     
     # Verificar que la página carga (no importa si hay error o no)
-    assert browser.current_url == BASE_URL + "/"
+    assert browser.current_url == BASE_URL.rstrip('/') + "/"
