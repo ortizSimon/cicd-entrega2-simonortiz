@@ -1,25 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Calculadora</title>
+    <title>To-Do List</title>
 </head>
 <body>
-    <h1>Calculadora</h1>
+    <h1>To-Do List</h1>
+    
+    <!-- Formulario para agregar nuevo todo -->
     <form method="post">
-        <input type="text" name="num1" placeholder="Número 1" required>
-        <input type="text" name="num2" placeholder="Número 2" required>
-        <select name="operacion">
-            <option value="sumar">Sumar</option>
-            <option value="restar">Restar</option>
-            <option value="multiplicar">Multiplicar</option>
-            <option value="dividir">Dividir</option>
-            <option value="potencia">Potencia</option>
-            <option value="modulo">Módulo</option>
-        </select>
-        <button type="submit">Calcular</button>
+        <input type="hidden" name="accion" value="agregar">
+        <input type="text" name="texto" placeholder="Nuevo todo" required>
+        <button type="submit">Agregar</button>
     </form>
-    {% if resultado is not none %}
-        <h2>Resultado: {{ resultado }}</h2>
+    
+    <!-- Mostrar mensaje si existe -->
+    {% if mensaje %}
+        <h2>{{ mensaje }}</h2>
+    {% endif %}
+    
+    <!-- Lista de todos -->
+    <h2>Todos:</h2>
+    {% if todos %}
+        {% for todo in todos %}
+            <div>
+                <span style="{% if todo.completado %}text-decoration: line-through;{% endif %}">
+                    {{ todo.texto }}
+                </span>
+                
+                {% if not todo.completado %}
+                    <form method="post" style="display: inline;">
+                        <input type="hidden" name="accion" value="completar">
+                        <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                        <button type="submit">Completar</button>
+                    </form>
+                {% endif %}
+                
+                <form method="post" style="display: inline;">
+                    <input type="hidden" name="accion" value="eliminar">
+                    <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                    <button type="submit">Eliminar</button>
+                </form>
+            </div>
+        {% endfor %}
+        
+        <!-- Botón para limpiar completados -->
+        <form method="post">
+            <input type="hidden" name="accion" value="limpiar">
+            <button type="submit">Limpiar Completados</button>
+        </form>
+    {% else %}
+        <p>No hay todos. ¡Agrega uno!</p>
     {% endif %}
 </body>
 </html>

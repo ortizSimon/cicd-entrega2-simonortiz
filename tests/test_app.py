@@ -13,47 +13,47 @@ def test_index_get(client):
     assert response.status_code == 200
     assert b'<!DOCTYPE html>' in response.data  # Assuming the HTML template starts with <!DOCTYPE html>
 
-def test_index_post_sumar(client):
-    response = client.post('/', data={'num1': '2', 'num2': '3', 'operacion': 'sumar'})
+def test_index_post_agregar(client):
+    response = client.post('/', data={'accion': 'agregar', 'texto': 'Nuevo todo'})
     assert response.status_code == 200
-    assert b'5.0' in response.data
+    assert b'Todo agregado exitosamente' in response.data
 
-def test_index_post_restar(client):
-    response = client.post('/', data={'num1': '5', 'num2': '3', 'operacion': 'restar'})
+def test_index_post_eliminar(client):
+    # Primero agregar un todo
+    client.post('/', data={'accion': 'agregar', 'texto': 'Todo a eliminar'})
+    # Luego eliminarlo
+    response = client.post('/', data={'accion': 'eliminar', 'todo_id': '1'})
     assert response.status_code == 200
-    assert b'2.0' in response.data
+    assert b'Todo eliminado exitosamente' in response.data
 
-def test_index_post_multiplicar(client):
-    response = client.post('/', data={'num1': '2', 'num2': '3', 'operacion': 'multiplicar'})
+def test_index_post_completar(client):
+    # Primero agregar un todo
+    client.post('/', data={'accion': 'agregar', 'texto': 'Todo a completar'})
+    # Luego completarlo
+    response = client.post('/', data={'accion': 'completar', 'todo_id': '1'})
     assert response.status_code == 200
-    assert b'6.0' in response.data
+    assert b'Todo marcado como completado' in response.data
 
-def test_index_post_dividir(client):
-    response = client.post('/', data={'num1': '6', 'num2': '3', 'operacion': 'dividir'})
+def test_index_post_limpiar(client):
+    # Primero agregar y completar un todo
+    client.post('/', data={'accion': 'agregar', 'texto': 'Todo a limpiar'})
+    client.post('/', data={'accion': 'completar', 'todo_id': '1'})
+    # Luego limpiar completados
+    response = client.post('/', data={'accion': 'limpiar'})
     assert response.status_code == 200
-    assert b'2.0' in response.data
+    assert b'Todos completados eliminados' in response.data
 
-def test_index_post_dividir_by_zero(client):
-    response = client.post('/', data={'num1': '6', 'num2': '0', 'operacion': 'dividir'})
+def test_index_post_texto_vacio(client):
+    response = client.post('/', data={'accion': 'agregar', 'texto': ''})
     assert response.status_code == 200
-    assert b'Error: No se puede dividir por cero' in response.data
+    assert b'Error:' in response.data
 
-def test_index_post_potencia(client):
-    response = client.post('/', data={'num1': '2', 'num2': '3', 'operacion': 'potencia'})
+def test_index_post_id_invalido(client):
+    response = client.post('/', data={'accion': 'eliminar', 'todo_id': '0'})
     assert response.status_code == 200
-    assert b'8.0' in response.data
+    assert b'Error:' in response.data
 
-def test_index_post_modulo(client):
-    response = client.post('/', data={'num1': '10', 'num2': '3', 'operacion': 'modulo'})
+def test_index_post_accion_invalida(client):
+    response = client.post('/', data={'accion': 'invalid', 'texto': 'test'})
     assert response.status_code == 200
-    assert b'1.0' in response.data
-
-def test_index_post_invalid_operation(client):
-    response = client.post('/', data={'num1': '6', 'num2': '3', 'operacion': 'invalid'})
-    assert response.status_code == 200
-    assert b'Operaci\xc3\xb3n no v\xc3\xa1lida' in response.data
-
-def test_index_post_invalid_numbers(client):
-    response = client.post('/', data={'num1': 'a', 'num2': 'b', 'operacion': 'sumar'})
-    assert response.status_code == 200
-    assert b'Error: Introduce n\xc3\xbameros v\xc3\xa1lidos' in response.data
+    assert b'Acción no válida' in response.data

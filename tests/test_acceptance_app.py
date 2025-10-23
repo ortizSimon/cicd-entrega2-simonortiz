@@ -32,51 +32,42 @@ def browser():
     driver.quit()
 
 
-# Función de ayuda para esperar y obtener el resultado
-def get_resultado(browser):
+# Función de ayuda para esperar y obtener el mensaje
+def get_mensaje(browser):
     try:
         # Espera HASTA QUE el <h2> sea visible (máximo 10 segundos)
-        resultado = WebDriverWait(browser, 10).until(
+        mensaje = WebDriverWait(browser, 10).until(
             EC.visibility_of_element_located((By.TAG_NAME, "h2"))
         )
-        return resultado.text
+        return mensaje.text
     except TimeoutException:
-        return "Error: Tiempo de espera agotado esperando el resultado."
+        return "Error: Tiempo de espera agotado esperando el mensaje."
 
 #Funcion auxiliar para encontrar elementos:
 def find_elements(browser):
-    num1_input = browser.find_element(By.NAME, "num1")
-    num2_input = browser.find_element(By.NAME, "num2")
-    operacion_select = Select(browser.find_element(By.NAME, "operacion"))
-    calcular_button = browser.find_element(By.CSS_SELECTOR, "button[type='submit']")
-    return num1_input, num2_input, operacion_select, calcular_button
+    texto_input = browser.find_element(By.NAME, "texto")
+    agregar_button = browser.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    return texto_input, agregar_button
 
 @pytest.mark.parametrize(
-    "num1, num2, operacion, resultado_esperado",
+    "texto, resultado_esperado",
     [
-        ("2", "3", "sumar", "Resultado: 5"),
-        ("5", "2", "restar", "Resultado: 3"),
-        ("4", "6", "multiplicar", "Resultado: 24"),
-        ("10", "2", "dividir", "Resultado: 5"), 
-        ("2", "3", "potencia", "Resultado: 8"),
-        ("5", "2", "potencia", "Resultado: 25"),
-        ("10", "3", "modulo", "Resultado: 1"),
-        ("15", "4", "modulo", "Resultado: 3"),
-        ("5", "0", "dividir", "Error: No se puede dividir por cero"),
-        ("abc", "def", "sumar", "Error: Introduce números válidos"), 
+        ("Hacer ejercicio", "Todo agregado exitosamente"),
+        ("Comprar leche", "Todo agregado exitosamente"),
+        ("Estudiar Python", "Todo agregado exitosamente"),
+        ("", "Error: El texto del todo no puede estar vacío"),
+        ("   ", "Error: El texto del todo no puede estar vacío"),
     ],
 )
-def test_calculadora(browser, num1, num2, operacion, resultado_esperado):
+def test_todo_list(browser, texto, resultado_esperado):
     browser.get(BASE_URL)
 
     # Encuentra los elementos de la página.  Esta vez con la funcion auxiliar.
-    num1_input, num2_input, operacion_select, calcular_button = find_elements(browser)
+    texto_input, agregar_button = find_elements(browser)
 
     #Realiza la operacion:
-    num1_input.send_keys(num1)
-    num2_input.send_keys(num2)
-    operacion_select.select_by_value(operacion)
-    calcular_button.click()
+    texto_input.send_keys(texto)
+    agregar_button.click()
 
     #Verifica con la funcion auxiliar:
-    assert resultado_esperado in get_resultado(browser)
+    assert resultado_esperado in get_mensaje(browser)

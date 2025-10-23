@@ -23,10 +23,10 @@ def test_smoke_test(browser):
     try:
         browser.get(app_url + "/")
         print(f"Título de la página: {browser.title}")
-        assert "Calculadora" in browser.title # Verifica que el título contenga "Calculadora"
+        assert "To-Do List" in browser.title # Verifica que el título contenga "To-Do List"
         h1_element = browser.find_element(By.TAG_NAME, "h1")
         print(f"Texto H1: {h1_element.text}")
-        assert h1_element.text == "Calculadora" # Verifica el texto del H1
+        assert h1_element.text == "To-Do List" # Verifica el texto del H1
         print("Smoke test pasado exitosamente.")
     except Exception as e:
         print(f"Smoke test falló: {e}")
