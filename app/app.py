@@ -7,7 +7,7 @@ a través de un formulario HTML.
 # app/app.py
 import os
 from flask import Flask, render_template, request, session
-from todo import (
+from .todo import (
     agregar_todo,
     eliminar_todo,
     marcar_completado,
