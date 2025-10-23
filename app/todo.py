@@ -9,7 +9,10 @@ def agregar_todo(todos, texto):
     """Agrega un nuevo todo a la lista."""
     if not texto or not texto.strip():
         raise ValueError("El texto del todo no puede estar vacío")
-    nuevo_todo = {"id": len(todos) + 1, "texto": texto.strip(), "completado": False}
+
+    # Generar ID único basado en el ID más alto existente + 1
+    max_id = max([todo["id"] for todo in todos], default=0)
+    nuevo_todo = {"id": max_id + 1, "texto": texto.strip(), "completado": False}
     todos.append(nuevo_todo)
     return nuevo_todo
 
@@ -31,6 +34,8 @@ def marcar_completado(todos, todo_id):
         return False
     for todo in todos:
         if todo["id"] == todo_id:
+            if todo["completado"]:
+                return False  # Ya está completado
             todo["completado"] = True
             return True
     return False

@@ -53,10 +53,16 @@ def index():
                     mensaje = "Error: Todo no encontrado"
             elif accion == "completar":
                 todo_id = int(request.form["todo_id"])
-                if marcar_completado(todos, todo_id):
+                resultado = marcar_completado(todos, todo_id)
+                if resultado:
                     mensaje = "Todo marcado como completado"
                 else:
-                    mensaje = "Error: Todo no encontrado"
+                    # Verificar si el todo existe pero ya está completado
+                    todo_existe = any(todo["id"] == todo_id for todo in todos)
+                    if todo_existe:
+                        mensaje = "Error: Este todo ya está completado"
+                    else:
+                        mensaje = "Error: Todo no encontrado"
             elif accion == "limpiar":
                 limpiar_completados(todos)
                 mensaje = "Todos completados eliminados"
