@@ -10,6 +10,42 @@ def test_agregar_todo():
     assert len(todos) == 1
     assert todos[0]["id"] == 1
 
+def test_eliminar_todo():
+    todos = []
+    agregar_todo(todos, "Todo 1")
+    agregar_todo(todos, "Todo 2")
+    resultado = eliminar_todo(todos, 1)
+    assert resultado == True
+    assert len(todos) == 1
+    assert todos[0]["texto"] == "Todo 2"
+
+def test_eliminar_todo_id_invalido():
+    todos = []
+    resultado = eliminar_todo(todos, 0)
+    assert resultado == False
+
+def test_eliminar_todo_no_encontrado():
+    todos = []
+    resultado = eliminar_todo(todos, 999)
+    assert resultado == False
+
+def test_marcar_completado():
+    todos = []
+    agregar_todo(todos, "Todo pendiente")
+    resultado = marcar_completado(todos, 1)
+    assert resultado == True
+    assert todos[0]["completado"] == True
+
+def test_marcar_completado_id_invalido():
+    todos = []
+    resultado = marcar_completado(todos, 0)
+    assert resultado == False
+
+def test_marcar_completado_no_encontrado():
+    todos = []
+    resultado = marcar_completado(todos, 999)
+    assert resultado == False
+
 def test_obtener_todos():
     todos = []
     agregar_todo(todos, "Todo 1")
