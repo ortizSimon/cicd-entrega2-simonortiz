@@ -11,12 +11,12 @@ def client():
 def test_index_get(client):
     response = client.get('/')
     assert response.status_code == 200
-    assert b'<!DOCTYPE html>' in response.data  # Assuming the HTML template starts with <!DOCTYPE html>
+    assert '<!DOCTYPE html>' in response.data.decode('utf-8')
 
 def test_index_post_agregar(client):
     response = client.post('/', data={'accion': 'agregar', 'texto': 'Nuevo todo'})
     assert response.status_code == 200
-    assert b'Todo agregado exitosamente' in response.data
+    assert 'Todo agregado exitosamente' in response.data.decode('utf-8')
 
 def test_index_post_eliminar(client):
     # Primero agregar un todo
@@ -24,7 +24,7 @@ def test_index_post_eliminar(client):
     # Luego eliminarlo
     response = client.post('/', data={'accion': 'eliminar', 'todo_id': '1'})
     assert response.status_code == 200
-    assert b'Todo eliminado exitosamente' in response.data
+    assert 'Todo eliminado exitosamente' in response.data.decode('utf-8')
 
 def test_index_post_completar(client):
     # Primero agregar un todo
@@ -32,7 +32,7 @@ def test_index_post_completar(client):
     # Luego completarlo
     response = client.post('/', data={'accion': 'completar', 'todo_id': '1'})
     assert response.status_code == 200
-    assert b'Todo marcado como completado' in response.data
+    assert 'Todo marcado como completado' in response.data.decode('utf-8')
 
 def test_index_post_limpiar(client):
     # Primero agregar y completar un todo
@@ -41,19 +41,19 @@ def test_index_post_limpiar(client):
     # Luego limpiar completados
     response = client.post('/', data={'accion': 'limpiar'})
     assert response.status_code == 200
-    assert b'Todos completados eliminados' in response.data
+    assert 'Todos completados eliminados' in response.data.decode('utf-8')
 
 def test_index_post_texto_vacio(client):
     response = client.post('/', data={'accion': 'agregar', 'texto': ''})
     assert response.status_code == 200
-    assert b'Error:' in response.data
+    assert 'Error:' in response.data.decode('utf-8')
 
 def test_index_post_id_invalido(client):
     response = client.post('/', data={'accion': 'eliminar', 'todo_id': '0'})
     assert response.status_code == 200
-    assert b'Error:' in response.data
+    assert 'Error:' in response.data.decode('utf-8')
 
 def test_index_post_accion_invalida(client):
     response = client.post('/', data={'accion': 'invalid', 'texto': 'test'})
     assert response.status_code == 200
-    assert b'Acción no válida' in response.data
+    assert 'Acción no válida' in response.data.decode('utf-8')
