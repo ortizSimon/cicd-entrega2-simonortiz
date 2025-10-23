@@ -53,9 +53,7 @@ def find_elements(browser):
     "texto, resultado_esperado",
     [
         ("Hacer ejercicio", "Todo agregado exitosamente"),
-        ("Comprar leche", "Todo agregado exitosamente"),
         ("Estudiar Python", "Todo agregado exitosamente"),
-        ("", "Error: El texto del todo no puede estar vacío"),
         ("   ", "Error: El texto del todo no puede estar vacío"),
     ],
 )

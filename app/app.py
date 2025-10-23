@@ -6,8 +6,8 @@ a través de un formulario HTML.
 
 # app/app.py
 import os
-from flask import Flask, render_template, request
-from .todo import (
+from flask import Flask, render_template, request, session
+from todo import (
     agregar_todo,
     eliminar_todo,
     marcar_completado,
@@ -17,6 +17,7 @@ from .todo import (
 
 app = Flask(__name__)
 app.config["DEBUG"] = False
+app.secret_key = "tu_clave_secreta_aqui"  # Para usar sesiones
 
 
 @app.route("/health")
@@ -27,8 +28,11 @@ def health():
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Maneja la página principal y el formulario de la to-do list."""
-    # Lista simple en memoria (en producción usarías una base de datos)
-    todos = obtener_todos([])
+    # Usar sesión para mantener los todos entre requests
+    if "todos" not in session:
+        session["todos"] = []
+
+    todos = session["todos"]
     mensaje = None
 
     if request.method == "POST":
@@ -37,16 +41,23 @@ def index():
 
             if accion == "agregar":
                 texto = request.form["texto"]
-                agregar_todo(todos, texto)
-                mensaje = "Todo agregado exitosamente"
+                if texto.strip():  # Verificar que no esté vacío
+                    agregar_todo(todos, texto)
+                    mensaje = "Todo agregado exitosamente"
+                else:
+                    mensaje = "Error: El texto no puede estar vacío"
             elif accion == "eliminar":
                 todo_id = int(request.form["todo_id"])
-                eliminar_todo(todos, todo_id)
-                mensaje = "Todo eliminado exitosamente"
+                if eliminar_todo(todos, todo_id):
+                    mensaje = "Todo eliminado exitosamente"
+                else:
+                    mensaje = "Error: Todo no encontrado"
             elif accion == "completar":
                 todo_id = int(request.form["todo_id"])
-                marcar_completado(todos, todo_id)
-                mensaje = "Todo marcado como completado"
+                if marcar_completado(todos, todo_id):
+                    mensaje = "Todo marcado como completado"
+                else:
+                    mensaje = "Error: Todo no encontrado"
             elif accion == "limpiar":
                 limpiar_completados(todos)
                 mensaje = "Todos completados eliminados"
@@ -56,6 +67,9 @@ def index():
             mensaje = f"Error: {str(e)}"
         except Exception as e:
             mensaje = f"Error inesperado: {str(e)}"
+
+        # Guardar los todos actualizados en la sesión
+        session["todos"] = todos
 
     return render_template("index.html", todos=todos, mensaje=mensaje)
 

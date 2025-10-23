@@ -1,55 +1,296 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .add-form input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .add-form input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .todos-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .todo-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            border-left-color: #28a745;
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .cleanup-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .add-form {
+                flex-direction: column;
+            }
+            
+            .todo-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .todo-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>To-Do List</h1>
-    
-    <!-- Formulario para agregar nuevo todo -->
-    <form method="post">
-        <input type="hidden" name="accion" value="agregar">
-        <input type="text" name="texto" placeholder="Nuevo todo" required>
-        <button type="submit">Agregar</button>
-    </form>
-    
-    <!-- Mostrar mensaje si existe -->
-    {% if mensaje %}
-        <h2>{{ mensaje }}</h2>
-    {% endif %}
-    
-    <!-- Lista de todos -->
-    <h2>Todos:</h2>
-    {% if todos %}
-        {% for todo in todos %}
-            <div>
-                <span style="{% if todo.completado %}text-decoration: line-through;{% endif %}">
-                    {{ todo.texto }}
-                </span>
-                
-                {% if not todo.completado %}
-                    <form method="post" style="display: inline;">
-                        <input type="hidden" name="accion" value="completar">
-                        <input type="hidden" name="todo_id" value="{{ todo.id }}">
-                        <button type="submit">Completar</button>
-                    </form>
-                {% endif %}
-                
-                <form method="post" style="display: inline;">
-                    <input type="hidden" name="accion" value="eliminar">
-                    <input type="hidden" name="todo_id" value="{{ todo.id }}">
-                    <button type="submit">Eliminar</button>
-                </form>
-            </div>
-        {% endfor %}
+    <div class="container">
+        <div class="header">
+            <h1>✓ To-Do List</h1>
+            <p>Organiza tus tareas de manera simple</p>
+        </div>
         
-        <!-- Botón para limpiar completados -->
-        <form method="post">
-            <input type="hidden" name="accion" value="limpiar">
-            <button type="submit">Limpiar Completados</button>
-        </form>
-    {% else %}
-        <p>No hay todos. ¡Agrega uno!</p>
-    {% endif %}
+        <div class="content">
+            <!-- Formulario para agregar nuevo todo -->
+            <form method="post" class="add-form">
+                <input type="hidden" name="accion" value="agregar">
+                <input type="text" name="texto" placeholder="¿Qué necesitas hacer?" required>
+                <button type="submit" class="btn btn-primary">Agregar</button>
+            </form>
+            
+            <!-- Mostrar mensaje si existe -->
+            {% if mensaje %}
+                <div class="message {% if 'Error' in mensaje %}error{% else %}success{% endif %}">
+                    {{ mensaje }}
+                </div>
+            {% endif %}
+            
+            <!-- Lista de todos -->
+            {% if todos %}
+                <div class="todos-section">
+                    <h2>📋 Tus tareas ({{ todos|length }})</h2>
+                    {% for todo in todos %}
+                        <div class="todo-item {% if todo.completado %}completed{% endif %}">
+                            <span class="todo-text {% if todo.completado %}completed{% endif %}">
+                                {{ todo.texto }}
+                            </span>
+                            
+                            <div class="todo-actions">
+                                {% if not todo.completado %}
+                                    <form method="post" style="display: inline;">
+                                        <input type="hidden" name="accion" value="completar">
+                                        <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                                        <button type="submit" class="btn btn-success">✓ Completar</button>
+                                    </form>
+                                {% endif %}
+                                
+                                <form method="post" style="display: inline;">
+                                    <input type="hidden" name="accion" value="eliminar">
+                                    <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                                    <button type="submit" class="btn btn-danger">🗑️ Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Botón para limpiar completados -->
+                <div class="cleanup-section">
+                    <form method="post">
+                        <input type="hidden" name="accion" value="limpiar">
+                        <button type="submit" class="btn btn-warning">🧹 Limpiar Completados</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>🎯 No tienes tareas pendientes</p>
+                    <p>¡Agrega tu primera tarea arriba!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>

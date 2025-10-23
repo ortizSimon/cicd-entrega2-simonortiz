@@ -17,22 +17,23 @@ def agregar_todo(todos, texto):
 def eliminar_todo(todos, todo_id):
     """Elimina un todo de la lista por ID."""
     if todo_id <= 0:
-        raise ValueError("ID de todo inválido")
+        return False
     for i, todo in enumerate(todos):
         if todo["id"] == todo_id:
-            return todos.pop(i)
-    raise ValueError("Todo no encontrado")
+            todos.pop(i)
+            return True
+    return False
 
 
 def marcar_completado(todos, todo_id):
     """Marca un todo como completado."""
     if todo_id <= 0:
-        raise ValueError("ID de todo inválido")
+        return False
     for todo in todos:
         if todo["id"] == todo_id:
             todo["completado"] = True
-            return todo
-    raise ValueError("Todo no encontrado")
+            return True
+    return False
 
 
 def obtener_todos(todos):
