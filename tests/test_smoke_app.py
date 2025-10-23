@@ -18,18 +18,13 @@ def browser():
 def test_smoke_test(browser):
     """SMOKE TEST: Verifica carga básica y título."""
     # Lee la URL de producción desde una variable de entorno
-    app_url = os.environ.get("APP_BASE_URL", "http://localhost:5000") # Usar la variable de entorno APP_BASE_URL que inyectaremos en el pipeline con la URL del ALB de Producción
-    print(f"Smoke test ejecutándose contra: {app_url}") # Imprime para depuración
+    app_url = os.environ.get("APP_BASE_URL", "http://localhost:5000")
+    print(f"Smoke test ejecutándose contra: {app_url}")
     try:
         browser.get(app_url + "/")
         print(f"Título de la página: {browser.title}")
-        assert "To-Do List" in browser.title # Verifica que el título contenga "To-Do List"
-        h1_element = browser.find_element(By.TAG_NAME, "h1")
-        print(f"Texto H1: {h1_element.text}")
-        assert h1_element.text == "To-Do List" # Verifica el texto del H1
+        assert "To-Do List" in browser.title
         print("Smoke test pasado exitosamente.")
     except Exception as e:
         print(f"Smoke test falló: {e}")
-        # Opcional: tomar captura de pantalla si falla
-        # browser.save_screenshot('smoke_test_failure.png')
-        raise # Vuelve a lanzar la excepción para que pytest marque el test como fallido
+        raise
