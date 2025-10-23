@@ -7,7 +7,13 @@ a través de un formulario HTML.
 # app/app.py
 import os
 from flask import Flask, render_template, request
-from .todo import agregar_todo, eliminar_todo, marcar_completado, obtener_todos, limpiar_completados
+from .todo import (
+    agregar_todo,
+    eliminar_todo,
+    marcar_completado,
+    obtener_todos,
+    limpiar_completados,
+)
 
 app = Flask(__name__)
 app.config["DEBUG"] = False
@@ -24,11 +30,11 @@ def index():
     # Lista simple en memoria (en producción usarías una base de datos)
     todos = obtener_todos([])
     mensaje = None
-    
+
     if request.method == "POST":
         try:
             accion = request.form["accion"]
-            
+
             if accion == "agregar":
                 texto = request.form["texto"]
                 agregar_todo(todos, texto)
