@@ -1,7 +1,7 @@
 """
 Aplicación web de to-do list simple usando Flask.
 Permite agregar, eliminar y marcar todos como completados
-a través de un formulario HTML.
+a través de un formulario HTML 2.
 """
 
 # app/app.py
