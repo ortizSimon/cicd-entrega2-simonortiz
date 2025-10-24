@@ -251,7 +251,7 @@ jobs:
   test-staging:
     needs: [update-service-staging, deploy-cfn-staging] # Depende de que el servicio esté estable con la nueva versión
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/main')
 
     steps:
       # 1. Checkout del código (para acceder a las pruebas)
