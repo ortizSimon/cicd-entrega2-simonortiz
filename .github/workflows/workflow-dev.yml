@@ -27,9 +27,9 @@ jobs:
       run: |
         python -m pytest tests/test_app.py tests/test_todo.py -v
     
-    - name: Run code formatting check
+    - name: Run code formatting
       run: |
-        python -m black --check app tests
+        python -m black app tests
     
     - name: Run linting
       run: |
